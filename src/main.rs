@@ -1,12 +1,14 @@
 mod copy;
 mod remove;
-mod mov;
 mod cwd;
 mod mkdir;
 mod echo;
 mod cd;
 mod grep;
 mod cat;
+mod ls;
+mod datetime;
+// mod mov;
 
 fn get_arg(char_vec: &Vec<char>, mut start: usize) -> (usize, usize, usize) {
 	let mut comp = ' ';
@@ -85,6 +87,12 @@ fn our_exit(args: &Vec<&str>) -> () {
 	}
 }
 
+pub fn our_move(args: &Vec<&str>) -> (){
+	use copy;
+	use remove;
+	copy::our_copy(&args);
+	remove::our_remove(&args);
+}
 
 fn run_internal(args: &Vec<&str>) -> () {
 	if args[0] == "exit" {
@@ -109,13 +117,19 @@ fn run_internal(args: &Vec<&str>) -> () {
 		remove::our_remove(&args);
 	}
 	if args[0] == "mv" {
-		mov::our_move(&args);
+		our_move(&args);
 	}
 	if args[0] == "grep" {
 		grep::our_grep(&args);
 	}
 	if args[0] == "cat" {
 		cat::our_cat(&args);
+	}
+	if args[0] == "ls" {
+		ls::our_ls(&args);
+	}
+	if args[0] == "date" {
+		datetime::date();
 	}
 }
 
@@ -151,6 +165,8 @@ fn main() {
 	internal_commands.push("mv");
 	internal_commands.push("grep");
 	internal_commands.push("cat");
+	internal_commands.push("ls");
+	internal_commands.push("date");
 	loop {
 		let mut command = String::from("");
 		print!("{}",prompt);
